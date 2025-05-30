@@ -2,8 +2,8 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CopNet Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CopNet Login mit Firebase</title>
   <style>
     :root {
       --primary: #1e293b;
@@ -13,11 +13,9 @@
       --text: #1e293b;
       --radius: 12px;
     }
-
     * {
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -29,7 +27,6 @@
       align-items: center;
       animation: fadeIn 1s ease;
     }
-
     .container {
       display: flex;
       align-items: center;
@@ -37,7 +34,6 @@
       width: 90%;
       max-width: 1000px;
     }
-
     .left-panel {
       flex: 1;
       padding: 2rem 3rem 2rem 2rem;
@@ -45,13 +41,11 @@
       flex-direction: column;
       justify-content: center;
     }
-
     .left-panel img {
       width: 160px;
       margin-bottom: 1.5rem;
       margin-left: 1rem;
     }
-
     .slogan {
       font-size: 1.2rem;
       font-weight: 500;
@@ -59,7 +53,6 @@
       white-space: nowrap;
       margin-left: 1rem;
     }
-
     .login-container {
       flex: 1;
       background: #fff;
@@ -72,12 +65,10 @@
       opacity: 0;
       animation: slideIn 0.6s ease-out forwards;
     }
-
     .login-container h2 {
       margin-bottom: 1.5rem;
       font-weight: 600;
     }
-
     input {
       width: 100%;
       padding: 0.75rem;
@@ -87,7 +78,6 @@
       background-color: var(--input-bg);
       font-size: 1rem;
     }
-
     button {
       width: 100%;
       padding: 0.75rem;
@@ -99,23 +89,24 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-
     button:hover {
       background-color: #0284c7;
     }
-
     #login-message {
       margin-top: 1rem;
       font-size: 0.95rem;
-      color: #dc2626;
       min-height: 1.5rem;
     }
-
+    #login-message.error {
+      color: #dc2626;
+    }
+    #login-message.success {
+      color: green;
+    }
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
-
     @keyframes slideIn {
       from {
         opacity: 0;
@@ -126,24 +117,20 @@
         transform: translateX(0);
       }
     }
-
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
         align-items: center;
       }
-
       .left-panel {
         align-items: center;
         text-align: center;
         padding: 1rem;
       }
-
       .left-panel img,
       .slogan {
         margin-left: 0;
       }
-
       .slogan {
         white-space: normal;
       }
@@ -153,14 +140,13 @@
 <body>
   <div class="container">
     <div class="left-panel">
-      <img src="logo.png" alt="Polizei Berlin Logo">
+      <img src="logo.png" alt="Polizei Berlin Logo" />
       <div class="slogan">Sicherheit. Vertrauen. Verantwortung.</div>
     </div>
-
     <div class="login-container">
-      <h2>Polizei Berlin Login</h2>
+      <h2>CopNet Login</h2>
       <form id="login-form">
-        <input type="text" id="username" placeholder="Benutzername" required />
+        <input type="email" id="email" placeholder="E-Mail" required />
         <input type="password" id="password" placeholder="Passwort" required />
         <button type="submit">Einloggen</button>
       </form>
@@ -168,22 +154,51 @@
     </div>
   </div>
 
-  <script>
-    document.getElementById('login-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const user = document.getElementById('username').value.trim();
-      const pass = document.getElementById('password').value.trim();
-      const message = document.getElementById('login-message');
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
 
-      if (user === 'admin' && pass === '1234') {
-        message.style.color = 'green';
+    // Firebase-Konfiguration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZl86AY6cRAagdiXKb1y239Va1xL8-pi0",
+      authDomain: "polizei-berlinrp.firebaseapp.com",
+      projectId: "polizei-berlinrp",
+      storageBucket: "polizei-berlinrp.firebasestorage.app",
+      messagingSenderId: "1005552433709",
+      appId: "1:1005552433709:web:9dff5ef418c68cc01796a4",
+      measurementId: "G-DGHR3DMBC0"
+    };
+
+    // Firebase initialisieren
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+
+    // Login-Formular-Handler
+    const loginForm = document.getElementById('login-form');
+    const message = document.getElementById('login-message');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      message.textContent = '';
+      message.className = '';
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         message.textContent = 'Login erfolgreich. Willkommen bei CopNet.';
+        message.classList.add('success');
+        // Optional: Weiterleitung nach Login, z.B. dashboard.html
         // window.location.href = 'dashboard.html';
-      } else {
-        message.style.color = '#dc2626';
-        message.textContent = 'Ungültiger Benutzername oder Passwort.';
+      } catch (error) {
+        message.textContent = `Fehler: ${error.message}`;
+        message.classList.add('error');
       }
     });
   </script>
 </body>
 </html>
+
