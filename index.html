@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CopNet Login</title>
+  <style>
+    :root {
+      --primary: #1e293b;
+      --accent: #0ea5e9;
+      --bg: #f8fafc;
+      --input-bg: #e2e8f0;
+      --text: #1e293b;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 1s ease;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 90%;
+      max-width: 1000px;
+    }
+
+    .left-panel {
+      flex: 1;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .left-panel img {
+      width: 120px;
+      margin-bottom: 1.5rem;
+    }
+
+    .slogan {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #334155;
+      max-width: 300px;
+    }
+
+    .login-container {
+      flex: 1;
+      background: #fff;
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+      opacity: 0;
+      animation: slideIn 0.6s ease-out forwards;
+    }
+
+    .login-container h2 {
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: var(--radius);
+      background-color: var(--input-bg);
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0284c7;
+    }
+
+    #login-message {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: #dc2626;
+      min-height: 1.5rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .left-panel {
+        align-items: center;
+        text-align: center;
+      }
+
+      .left-panel img {
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-panel">
+      <img src="logo.png" alt="Polizei Berlin Logo">
+      <div class="slogan">Sicherheit. Vertrauen. Verantwortung.</div>
+    </div>
+
+    <div class="login-container">
+      <h2>CopNet Login</h2>
+      <form id="login-form">
+        <input type="text" id="username" placeholder="Benutzername" required />
+        <input type="password" id="password" placeholder="Passwort" required />
+        <button type="submit">Einloggen</button>
+      </form>
+      <p id="login-message"></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      const message = document.getElementById('login-message');
+
+      if (user === 'admin' && pass === '1234') {
+        message.style.color = 'green';
+        message.textContent = 'Login erfolgreich. Willkommen bei CopNet.';
+        // window.location.href = 'dashboard.html';
+      } else {
+        message.style.color = '#dc2626';
+        message.textContent = 'Ungültiger Benutzername oder Passwort.';
+      }
+    });
+  </script>
+</body>
+</html>
