@@ -40,23 +40,24 @@
 
     .left-panel {
       flex: 1;
-      padding: 2rem;
+      padding: 2rem 3rem 2rem 2rem;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
       justify-content: center;
     }
 
     .left-panel img {
-      width: 120px;
+      width: 160px;
       margin-bottom: 1.5rem;
+      margin-left: 1rem;
     }
 
     .slogan {
       font-size: 1.2rem;
       font-weight: 500;
       color: #334155;
-      max-width: 300px;
+      white-space: nowrap;
+      margin-left: 1rem;
     }
 
     .login-container {
@@ -135,10 +136,16 @@
       .left-panel {
         align-items: center;
         text-align: center;
+        padding: 1rem;
       }
 
-      .left-panel img {
-        margin-bottom: 1rem;
+      .left-panel img,
+      .slogan {
+        margin-left: 0;
+      }
+
+      .slogan {
+        white-space: normal;
       }
     }
   </style>
